@@ -294,9 +294,9 @@
   <div class="header-inner">
     <h1>Painter<br>Section A Practice Test</h1>
     <div class="header-meta">
-      <span>40 Questions</span>
+      <span>55 Questions</span>
       <span class="dot"></span>
-      <span>40 Marks</span>
+      <span>55 Marks</span>
       <span class="dot"></span>
       <span>Multiple Choice</span>
       <span class="dot"></span>
@@ -326,7 +326,7 @@
   <div id="test" class="section active">
     <div class="stats-bar">
       <div class="stat-cell"><div class="stat-num" id="s-ans">0</div><div class="stat-label">Answered</div></div>
-      <div class="stat-cell"><div class="stat-num" id="s-rem">40</div><div class="stat-label">Remaining</div></div>
+      <div class="stat-cell"><div class="stat-num" id="s-rem">55</div><div class="stat-label">Remaining</div></div>
       <div class="stat-cell"><div class="stat-num" id="s-cor">—</div><div class="stat-label">Correct</div></div>
       <div class="stat-cell"><div class="stat-num" id="s-pct">—</div><div class="stat-label">Score %</div></div>
     </div>
@@ -451,11 +451,26 @@ const Qs=[
 {q:"Identify the grade of sand paper that you would use LAST when preparing a wooden substrate.",o:["80 grade","100 grade","200 grade","240 grade"],a:3},
 {q:"Identify the grade of sand paper that you would use FIRST when preparing a wooden substrate.",o:["80 grade","100 grade","200 grade","240 grade"],a:0},
 {q:"Identify the Personal Protective Equipment that should be used to protect against the inhalation of harmful chemicals and fumes.",o:["Dust mask","Respirator","Overall","Ear muffs"],a:1},
-{q:"Masking tape and paper is usually used when preparing for painting to:",o:["Give painted areas straight edges","Promote bonding/cohesion of paint","Prevent paint from touching covered areas","Ensure that paint is not wasted"],a:2}
+{q:"Masking tape and paper is usually used when preparing for painting to:",o:["Give painted areas straight edges","Promote bonding/cohesion of paint","Prevent paint from touching covered areas","Ensure that paint is not wasted"],a:2},
+{q:"What is the MAIN purpose of using thinners in paint?",o:["To increase the drying time","To reduce the viscosity for easier application","To improve the colour of paint","To increase the coverage of paint"],a:1},
+{q:"Which type of paint finish is MOST suitable for bathrooms and kitchens?",o:["Flat/matte","Eggshell","Semi-gloss or gloss","Primer"],a:2},
+{q:"What does PPE stand for?",o:["Paint Protection Equipment","Personal Protective Equipment","Professional Painting Equipment","Primary Paint Elements"],a:1},
+{q:"What is efflorescence?",o:["A decorative paint technique","White salt deposits on masonry surfaces","A paint defect caused by excessive heat","The process of mixing two paint colours"],a:1},
+{q:"What is the purpose of an undercoat?",o:["To provide a decorative finish","To protect the surface from moisture","To provide a uniform base and improve topcoat adhesion","To fill cracks and holes in the surface"],a:2},
+{q:"What causes blistering in a paint finish?",o:["Too many coats of paint applied","Moisture trapped beneath the paint film","Using the wrong type of brush","Applying paint in cold weather"],a:1},
+{q:"What does VOC stand for in relation to paints?",o:["Volume of Colour","Variety of Coatings","Volatile Organic Compounds","Viscosity of Composition"],a:2},
+{q:"A tack cloth is used to:",o:["Apply paint evenly to a surface","Remove excess paint from a brush","Remove dust and particles from a surface before painting","Clean brushes after painting"],a:2},
+{q:"Which of the following is the CORRECT way to clean an oil-based paint brush?",o:["Wash with warm soapy water","Soak in mineral spirits or paint thinner","Wipe with a dry cloth","Rinse with cold water"],a:1},
+{q:"What is 'cutting in' when painting?",o:["Scoring the surface before painting","Painting edges and corners with a brush before rolling","Cutting paint tins open safely","Removing old paint with a knife"],a:1},
+{q:"What is the purpose of a paint conditioner?",o:["To change the colour of paint","To extend the drying time and improve flow","To increase the thickness of paint","To remove impurities from paint"],a:1},
+{q:"Sagging or runs in a paint finish are MOST commonly caused by:",o:["Applying paint too thinly","Using a low-quality brush","Applying too much paint in one coat","Painting in humid conditions"],a:2},
+{q:"Which of the following surfaces requires an etching primer before painting?",o:["Plasterboard","Bare timber","Galvanised metal","Previously painted brick"],a:2},
+{q:"What is the CORRECT order of surface preparation before painting?",o:["Prime, clean, sand, fill","Clean, fill, sand, prime","Fill, sand, clean, prime","Sand, clean, fill, prime"],a:1},
+{q:"Which of the following BEST describes the function of a sealer?",o:["Adds colour to the surface","Prevents stains and bleeding through the topcoat","Speeds up the drying time of topcoat","Acts as the final decorative coat"],a:1}
 ];
 
 const L=["A","B","C","D"];
-let uA=new Array(40).fill(null);
+let uA=new Array(55).fill(null);
 let done=false;
 
 function buildQs(){
@@ -494,13 +509,13 @@ function pick(qi,oi){
 function updateStats(){
   const a=uA.filter(x=>x!==null).length;
   document.getElementById('s-ans').textContent=a;
-  document.getElementById('s-rem').textContent=40-a;
-  document.getElementById('prog').style.width=(a/40*100)+'%';
-  document.getElementById('prog-label').textContent=a+' / 40 answered';
+  document.getElementById('s-rem').textContent=55-a;
+  document.getElementById('prog').style.width=(a/55*100)+'%';
+  document.getElementById('prog-label').textContent=a+' / 55 answered';
   if(done){
     const cor=uA.filter((a,i)=>a===Qs[i].a).length;
     document.getElementById('s-cor').textContent=cor;
-    document.getElementById('s-pct').textContent=Math.round(cor/40*100)+'%';
+    document.getElementById('s-pct').textContent=Math.round(cor/55*100)+'%';
   }
 }
 
@@ -547,8 +562,8 @@ function submitTest(){
     });
   });
   const cor=uA.filter((a,i)=>a===Qs[i].a).length;
-  const pct=Math.round(cor/40*100);
-  document.getElementById('final-score').innerHTML=cor+'<span class="score-denom">/40</span>';
+  const pct=Math.round(cor/55*100);
+  document.getElementById('final-score').innerHTML=cor+'<span class="score-denom">/55</span>';
   document.getElementById('final-pct').textContent=pct+'%';
   const badge=document.getElementById('grade-badge');
   let g,gc;
@@ -565,9 +580,9 @@ function submitTest(){
 
 function clearAll(){
   done=false;
-  uA=new Array(40).fill(null);
+  uA=new Array(55).fill(null);
   buildQs();updateStats();buildGrids();buildAnswerSheet();
-  document.getElementById('final-score').innerHTML='—<span class="score-denom">/40</span>';
+  document.getElementById('final-score').innerHTML='—<span class="score-denom">/55</span>';
   document.getElementById('final-pct').textContent='—%';
   document.getElementById('grade-badge').className='score-grade grade-3';
   document.getElementById('grade-badge').textContent='Submit test to see results';
