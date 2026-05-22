@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painter — Section A Practice Test</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a18;
+    --paper: #f5f2eb;
+    --cream: #edeae0;
+    --rule: #c8c3b4;
+    --blue: #1a4f8a;
+    --blue-light: #d4e3f5;
+    --green: #2a6644;
+    --green-light: #d4edd9;
+    --red: #8a2a2a;
+    --red-light: #f5d4d4;
+    --amber: #8a5a1a;
+    --amber-light: #f5e8d4;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+  /* HEADER */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border: 40px solid rgba(245,242,235,0.06);
+    border-radius: 50%;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 60px;
+    width: 150px; height: 150px;
+    border: 30px solid rgba(245,242,235,0.04);
+    border-radius: 50%;
+  }
+  .header-inner { max-width: 800px; margin: 0 auto; position: relative; }
+  .exam-tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,242,235,0.5);
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  .header-meta {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: rgba(245,242,235,0.6);
+  }
+  .header-meta span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 5px; height: 5px; background: rgba(245,242,235,0.3); border-radius: 50%; display: inline-block; }
+  /* PROGRESS */
+  .progress-wrap { background: var(--cream); border-bottom: 1px solid var(--rule); padding: 0; position: sticky; top: 0; z-index: 100; }
+  .progress-inner { max-width: 800px; margin: 0 auto; display: flex; align-items: center; gap: 1rem; padding: 0.75rem 2rem; }
+  .progress-bar { flex: 1; height: 3px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--blue); border-radius: 2px; transition: width 0.3s; width: 0%; }
+  .progress-label { font-size: 12px; color: #888; white-space: nowrap; min-width: 80px; text-align: right; }
+  /* TABS */
+  .tabs-wrap { background: var(--cream); border-bottom: 1px solid var(--rule); }
+  .tabs { max-width: 800px; margin: 0 auto; display: flex; padding: 0 2rem; }
+  .tab-btn {
+    padding: 0.85rem 1.25rem;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    color: #888;
+    transition: color 0.2s, border-color 0.2s;
+    margin-bottom: -1px;
+  }
+  .tab-btn:hover { color: var(--ink); }
+  .tab-btn.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 500; }
+  /* MAIN */
+  main { max-width: 800px; margin: 0 auto; padding: 2rem; }
+  .section { display: none; }
+  .section.active { display: block; }
+  /* STATS BAR */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  .stat-cell {
+    background: var(--cream);
+    padding: 1rem;
+    text-align: center;
+  }
+  .stat-num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--ink); }
+  .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #999; margin-top: 2px; }
+  /* QUESTIONS */
+  .q-block {
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: #fff;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .q-block.answered { border-color: #b0c8e8; }
+  .q-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 1rem 1.25rem 0;
+  }
+  .q-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--rule);
+    min-width: 32px;
+    line-height: 1;
+  }
+  .q-text { font-size: 14px; line-height: 1.6; color: var(--ink); padding-bottom: 0.75rem; }
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--rule);
+    border-top: 1px solid var(--rule);
+  }
+  @media (max-width: 520px) { .options { grid-template-columns: 1fr; } }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 0.75rem 1rem;
+    background: var(--paper);
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink);
+    transition: background 0.15s;
+    border: none;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    width: 100%;
+  }
+  .opt:hover { background: var(--cream); }
+  .opt.selected { background: var(--blue-light); }
+  .opt.correct { background: var(--green-light); }
+  .opt.wrong { background: var(--red-light); }
+  .opt-letter {
+    font-weight: 500;
+    font-size: 11px;
+    min-width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--rule);
+    color: var(--ink);
+    flex-shrink: 0;
+    margin-top: 1px;
+    letter-spacing: 0;
+  }
+  .opt.selected .opt-letter { background: var(--blue); color: #fff; }
+  .opt.correct .opt-letter { background: var(--green); color: #fff; }
+  .opt.wrong .opt-letter { background: var(--red); color: #fff; }
+  /* ACTIONS */
+  .actions { display: flex; gap: 10px; margin-top: 2rem; }
+  .btn {
+    flex: 1;
+    padding: 0.875rem 1.5rem;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid var(--rule);
+    background: var(--cream);
+    color: var(--ink);
+  }
+  .btn:hover { background: #e0ddd4; }
+  .btn.primary {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+  .btn.primary:hover { background: #333; }
+  /* ANSWER GRID */
+  .ans-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 6px;
+    margin-bottom: 2rem;
+  }
+  @media (max-width: 480px) { .ans-grid { grid-template-columns: repeat(5, 1fr); } }
+  .ans-cell {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--cream);
+    padding: 8px 4px;
+    text-align: center;
+  }
+  .ans-cell .an { font-size: 10px; color: #999; }
+  .ans-cell .av {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .ans-cell.correct-a { background: var(--green-light); border-color: #9fc8af; }
+  .ans-cell.correct-a .av { color: var(--green); }
+  .ans-cell.wrong-a { background: var(--red-light); border-color: #e0aaaa; }
+  .ans-cell.wrong-a .av { color: var(--red); }
+  .ans-cell.blank .av { color: var(--rule); }
+  /* RESULTS */
+  .score-hero {
+    text-align: center;
+    padding: 3rem 2rem;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: #fff;
+    margin-bottom: 2rem;
+  }
+  .score-big {
+    font-family: 'DM Serif Display', serif;
+    font-size: 72px;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .score-denom { font-size: 36px; color: var(--rule); }
+  .score-pct { font-size: 22px; color: #888; margin-top: 6px; }
+  .score-grade {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .grade-5 { background: var(--green-light); color: var(--green); }
+  .grade-4 { background: #d4edd9; color: #2a6644; }
+  .grade-3 { background: var(--blue-light); color: var(--blue); }
+  .grade-2 { background: var(--amber-light); color: var(--amber); }
+  .grade-1 { background: var(--red-light); color: var(--red); }
+  .key-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 2rem; }
+  .key-table th { text-align: left; padding: 8px 12px; background: var(--cream); border: 1px solid var(--rule); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .key-table td { padding: 10px 12px; border: 1px solid var(--rule); background: #fff; }
+  .section-intro { font-size: 13px; color: #888; margin-bottom: 1.5rem; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="exam-tag">City &amp; Guilds · Vocational Assessment</div>
+    <h1>Painter<br>Section A Practice Test</h1>
+    <div class="header-meta">
+      <span>40 Questions</span>
+      <span class="dot"></span>
+      <span>40 Marks</span>
+      <span class="dot"></span>
+      <span>Multiple Choice</span>
+      <span class="dot"></span>
+      <span>One mark per item</span>
+    </div>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+    <div class="progress-label" id="prog-label">0 / 40 answered</div>
+  </div>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('test')">Test Paper</button>
+    <button class="tab-btn" onclick="showTab('answers')">Answer Sheet</button>
+    <button class="tab-btn" onclick="showTab('results')" id="res-tab">Results</button>
+    <button class="tab-btn" onclick="showTab('key')">Rating Key</button>
+  </div>
+</div>
+
+<main>
+  <!-- TEST SECTION -->
+  <div id="test" class="section active">
+    <div class="stats-bar">
+      <div class="stat-cell"><div class="stat-num" id="s-ans">0</div><div class="stat-label">Answered</div></div>
+      <div class="stat-cell"><div class="stat-num" id="s-rem">40</div><div class="stat-label">Remaining</div></div>
+      <div class="stat-cell"><div class="stat-num" id="s-cor">—</div><div class="stat-label">Correct</div></div>
+      <div class="stat-cell"><div class="stat-num" id="s-pct">—</div><div class="stat-label">Score %</div></div>
+    </div>
+    <div id="questions"></div>
+    <div class="actions">
+      <button class="btn" onclick="clearAll()">Clear &amp; Restart</button>
+      <button class="btn primary" onclick="submitTest()">Submit &amp; Mark →</button>
+    </div>
+  </div>
+
+  <!-- ANSWERS SECTION -->
+  <div id="answers" class="section">
+    <p class="section-intro">Your selected answers are shown below. Colours appear after you submit: green = correct, red = incorrect.</p>
+    <div class="ans-grid" id="ans-grid"></div>
+    <div class="actions">
+      <button class="btn primary" onclick="showTab('test')">Back to Test</button>
+    </div>
+  </div>
+
+  <!-- RESULTS SECTION -->
+  <div id="results" class="section">
+    <div class="score-hero">
+      <div class="score-big" id="final-score">—<span class="score-denom">/40</span></div>
+      <div class="score-pct" id="final-pct">—%</div>
+      <div id="grade-badge" class="score-grade grade-3">Submit test to see results</div>
+    </div>
+    <p class="section-intro">Each answer below is colour-coded. Use this to identify areas for further study.</p>
+    <div class="ans-grid" id="res-grid"></div>
+    <div class="actions">
+      <button class="btn" onclick="clearAll()">Retake Test</button>
+    </div>
+  </div>
+
+  <!-- RATING KEY SECTION -->
+  <div id="key" class="section">
+    <p class="section-intro">This rating scale is used to assess your level of competency in the skill area.</p>
+    <table class="key-table">
+      <thead>
+        <tr>
+          <th>Competency</th>
+          <th>Rating</th>
+          <th>Level 1 %</th>
+          <th>Levels 2&3 %</th>
+          <th>Levels 4&5 %</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="3" style="color:#2a6644;font-weight:500;">COMPETENT</td>
+          <td style="text-align:center;font-weight:500;">5</td>
+          <td>75–100</td><td>80–100</td><td>85–100</td>
+          <td>Demonstrates a working knowledge of the skill area and can perform adeptly, with initiative and adaptability to problem situations with a mastery of related language and technical knowledge.</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:500;">4</td>
+          <td>60–74</td><td>65–79</td><td>75–84</td>
+          <td>Demonstrates sufficient knowledge and ability in the skill area to perform satisfactorily and apply working rules for problem solution with correct related language usage.</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:500;">3</td>
+          <td>45–59</td><td>50–64</td><td>65–74</td>
+          <td>Demonstrates sufficient knowledge and ability to perform the skill area but requires supervision.</td>
+        </tr>
+        <tr>
+          <td rowspan="2" style="color:#8a2a2a;font-weight:500;">NOT YET COMPETENT</td>
+          <td style="text-align:center;font-weight:500;">2</td>
+          <td>30–44</td><td>35–49</td><td>45–64</td>
+          <td>Demonstrates limited knowledge and ability to perform in some aspects of skill area and requires close training and supervision.</td>
+        </tr>
+        <tr>
+          <td style="text-align:center;font-weight:500;">1</td>
+          <td>Below 30</td><td>Below 35</td><td>Below 45</td>
+          <td>Demonstrates insufficient evidence of the knowledge, ability and actions in the skill area; no judgement can be made on individual's competence.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="actions">
+      <button class="btn primary" onclick="showTab('test')">Go to Test</button>
+    </div>
+  </div>
+</main>
+
+<script>
+const Qs=[
+{q:"All the following are quality assurance measures for painting and decorating EXCEPT:",o:["Using an oil paint over a water paint","Using the correct solvent","Ensure the area is properly primed","Ensuring that all uneven surface for painting are corrected"],a:0},
+{q:"Chemical substances used in striping, cleaning and preparing surfaces for painting and decorating can enter the body by which of the following means:",o:["Ear temple","Skin absorption","Ear stirrup","Hair scalp"],a:1},
+{q:"Some paint removing substances are categorised as:",o:["Extremely flammable","Environmentally friendly","Good paint remover","Very strong solvent"],a:0},
+{q:"Oil based paint include ALL the following EXCEPT:",o:["Enamel","Painter","Acrylic","Cellulose"],a:2},
+{q:"_______ acts as a bonding agent between the surface and the topcoat when painting a surface.",o:["Putty","Filler","Solvent","Primer"],a:3},
+{q:"Which paint is MOSTLY used on metal and wood furniture?",o:["Cellulose paint","Aluminium paint","Lacquers or quick drying finish","Oil paint"],a:2},
+{q:"_______ is any binding agent that is used to prepare a surface for final paint finishing.",o:["Oil paint","Paint reducer","Compound","Primer"],a:3},
+{q:"Select the MAIN function of a drop sheet in carrying out a painting job. It:",o:["Covers furniture and fixtures","Protects the floor area from seeping paint","Reduces the toxicity","Protects the tarpaulin from being soaked"],a:1},
+{q:"_______ indicates colours falling between the secondary colour and tertiary colours.",o:["Colour latex","Colour axis","Colour spectrum","Colour wheel"],a:3},
+{q:"Which of the following are the THREE (3) primary colours?",o:["Red, yellow and blue","Yellow, red and green","Red, yellow, green and blue","Orange, purple and green"],a:0},
+{q:"The red paint that is painted on the steel serves as a:",o:["Primer","Strip agent","Thickener for painted area","Protector for the surface"],a:0},
+{q:"Cellulose paints are used on:",o:["Metal glass","Wooden plastic","Metal wood","Plastic glass"],a:2},
+{q:"Which of the following BEST describes paint?",o:["An alkaline-based substance that is not easily washable","An ethanol-based substance that is highly flammable","A washable substance used for colouring","A pigmented substance used to add colour to a structure"],a:3},
+{q:"What causes dark brown spots especially around air conditioners and leaks in the roof?",o:["Old paint","The fungus infestation","Too much water in the area","Brand and mixture of paint"],a:1},
+{q:"What is the advantage of using a roller, instead of a brush? It:",o:["Covers more area in a short time","Gives a taller reach","Uses less paint","Gives less paint droppings"],a:0},
+{q:"Paints have FOUR (4) parts. What are they?",o:["Pigment, oil, vehicle binders and thinner","Pigment, vehicle binders, thinner and additives","Pigment, solvent, thinner and additives","Pigment, liquid, additives and binder"],a:1},
+{q:"What is used to prevent fungus attacks after application?",o:["Sealer","Thinner","Pigment","Anti-fungus Agent"],a:3},
+{q:"Which of the following is NOT a method of paint application?",o:["Straw","Brush","Roller","Spray"],a:0},
+{q:"My burglar bars are rusting, what can I do?",o:["Remove the rust by using a wire brush and sand paper","Repaint using a thick coat of paint","Avoid damage to paint surfaces and dry plaster","Use a bonding agent"],a:0},
+{q:"Indicate the reason why it is NOT recommended for a room to be occupied immediately after painting.",o:["It is not good for inhaling the fumes","Paint not dry and may scratch the paint surfaces","Avoid damage to paint surfaces and dry plaster","Paint dries slowly and will bleed"],a:0},
+{q:"The internal walls of a rectangular room measure 14 feet wide by 18 feet long and 10 feet high. Ignoring doors and windows, how many gallons of paint will it take to cover the surface if one gallon covers 400 sq ft using a 2-coat method?",o:["8.2 gallons","1.6 gallons","2.4 gallons","3.2 gallons"],a:3},
+{q:"A room is 8 meters long by 5 meters wide and 4 meters high. How many metre square of wall are there in this room?",o:["96 M²","100 M²","104 M²","106 M²"],a:2},
+{q:"The MOST common cause of paint defect is:",o:["Poor surface preparation","Product expiration","Bad weather conditions","Mixing thinner with paint"],a:0},
+{q:"Which of the following MUST be done before painting?",o:["Patch holes in walls","Seal all doors and windows","Remove any debris and dirt","Stir your paint thoroughly"],a:2},
+{q:"What is a common hazard associated with painting?",o:["A lead based paint","A toxic fume","Falling off a ladder","Electrical shock"],a:2},
+{q:"What colour is obtained after mixing blue and yellow paints?",o:["Grey","Green","Brown","Dark grey"],a:1},
+{q:"Which surface is MOST recommended to use water-based paint?",o:["Metal","Wood","Wall","Concrete"],a:2},
+{q:"The MOST accurate pitch for a ladder when used by a painter is:",o:["70°","75°","80°","90°"],a:1},
+{q:"To arrive at the correct pitch of the ladder the ratio is:",o:["1 in 5","1 in 4","1 in 6","1 in 12"],a:1},
+{q:"The minimum bearing capacity for workmen on a scaffold is:",o:["5 times materials, tools and workmen","4 times tools, materials and workmen","7 times materials and workmen","8 times material, tools and work men"],a:1},
+{q:"What is the quick rough estimate for 1 gallon of paint?",o:["260 square feet","400 square feet","500 square feet","550 square feet"],a:1},
+{q:"What is the purpose of an anti-setting agent in a can of paint?",o:["Keep the paint stable in the can","Prevent the paint from setting","Prevent from skinning in the can","Prevent rusting in the can"],a:2},
+{q:"Which type of paint is best to use on metal surfaces?",o:["Water","Oil","Acrylic","Low sheen"],a:1},
+{q:"Stain gives:",o:["A natural colour to wood finish","Many colours to wood","Makes wood easy to clean","Makes wood surfaces resistant"],a:0},
+{q:"When operating an EWP on a suspended floor of a building, what must the operator ensure prior to undertaking this work?",o:["Ensure the slab/floor can support the EWP","Avoid other persons working in the area","Fence or barricade area of working radius","It may be required to submit a work method statement prior to operating"],a:0},
+{q:"When mobilising an EWP up a hill, should the boom and basket be facing up the hill or down the hill?",o:["Up the hill","Down the hill","On the left","Above the EWP"],a:1},
+{q:"Identify the grade of sand paper that you would use LAST when preparing a wooden substrate.",o:["80 grade","100 grade","200 grade","240 grade"],a:3},
+{q:"Identify the grade of sand paper that you would use FIRST when preparing a wooden substrate.",o:["80 grade","100 grade","200 grade","240 grade"],a:0},
+{q:"Identify the Personal Protective Equipment that should be used to protect against the inhalation of harmful chemicals and fumes.",o:["Dust mask","Respirator","Overall","Ear muffs"],a:1},
+{q:"Masking tape and paper is usually used when preparing for painting to:",o:["Give painted areas straight edges","Promote bonding/cohesion of paint","Prevent paint from touching covered areas","Ensure that paint is not wasted"],a:2}
+];
+
+const L=["A","B","C","D"];
+let uA=new Array(40).fill(null);
+let done=false;
+
+function buildQs(){
+  const c=document.getElementById('questions');
+  c.innerHTML='';
+  Qs.forEach((q,i)=>{
+    const d=document.createElement('div');
+    d.className='q-block'+(uA[i]!==null?' answered':'');
+    d.id='q'+i;
+    d.innerHTML=`
+      <div class="q-header">
+        <span class="q-number">${String(i+1).padStart(2,'0')}</span>
+        <p class="q-text">${q.q}</p>
+      </div>
+      <div class="options" id="opts${i}">
+        ${q.o.map((o,j)=>`
+          <button class="opt${uA[i]===j?' selected':''}" onclick="pick(${i},${j})" id="opt${i}_${j}">
+            <span class="opt-letter">${L[j]}</span><span>${o}</span>
+          </button>`).join('')}
+      </div>`;
+    c.appendChild(d);
+  });
+}
+
+function pick(qi,oi){
+  if(done)return;
+  uA[qi]=oi;
+  const opts=document.getElementById('opts'+qi);
+  opts.querySelectorAll('.opt').forEach((el,j)=>{
+    el.className='opt'+(j===oi?' selected':'');
+  });
+  document.getElementById('q'+qi).className='q-block answered';
+  updateStats();buildGrids();
+}
+
+function updateStats(){
+  const a=uA.filter(x=>x!==null).length;
+  document.getElementById('s-ans').textContent=a;
+  document.getElementById('s-rem').textContent=40-a;
+  document.getElementById('prog').style.width=(a/40*100)+'%';
+  document.getElementById('prog-label').textContent=a+' / 40 answered';
+  if(done){
+    const cor=uA.filter((a,i)=>a===Qs[i].a).length;
+    document.getElementById('s-cor').textContent=cor;
+    document.getElementById('s-pct').textContent=Math.round(cor/40*100)+'%';
+  }
+}
+
+function buildGrids(){
+  ['ans-grid','res-grid'].forEach(id=>{
+    const g=document.getElementById(id);
+    if(!g)return;
+    g.innerHTML=Qs.map((_,i)=>{
+      const v=uA[i]!==null?L[uA[i]]:'·';
+      let cls='ans-cell';
+      if(done&&uA[i]!==null)cls+=(uA[i]===Qs[i].a?' correct-a':' wrong-a');
+      else if(uA[i]===null)cls+=' blank';
+      return`<div class="${cls}"><div class="an">${i+1}</div><div class="av">${v}</div></div>`;
+    }).join('');
+  });
+}
+
+function submitTest(){
+  if(uA.filter(x=>x!==null).length<1){alert('Please answer at least one question first.');return;}
+  done=true;
+  Qs.forEach((q,i)=>{
+    const opts=document.getElementById('opts'+i);
+    if(!opts)return;
+    opts.querySelectorAll('.opt').forEach((el,j)=>{
+      el.onclick=null;
+      if(j===q.a)el.className='opt correct';
+      else if(uA[i]===j)el.className='opt wrong';
+      else el.className='opt';
+    });
+  });
+  const cor=uA.filter((a,i)=>a===Qs[i].a).length;
+  const pct=Math.round(cor/40*100);
+  document.getElementById('final-score').innerHTML=cor+'<span class="score-denom">/40</span>';
+  document.getElementById('final-pct').textContent=pct+'%';
+  const badge=document.getElementById('grade-badge');
+  let g,gc;
+  if(pct>=85){g='Rating 5 — Excellent (Competent)';gc='grade-5';}
+  else if(pct>=75){g='Rating 4 — Good (Competent)';gc='grade-4';}
+  else if(pct>=65){g='Rating 3 — Satisfactory (Competent)';gc='grade-3';}
+  else if(pct>=45){g='Rating 2 — Limited (Not yet competent)';gc='grade-2';}
+  else{g='Rating 1 — Below competency threshold';gc='grade-1';}
+  badge.className='score-grade '+gc;
+  badge.textContent=g;
+  updateStats();buildGrids();
+  showTab('results');
+}
+
+function clearAll(){
+  done=false;
+  uA=new Array(40).fill(null);
+  buildQs();updateStats();buildGrids();
+  document.getElementById('final-score').innerHTML='—<span class="score-denom">/40</span>';
+  document.getElementById('final-pct').textContent='—%';
+  document.getElementById('grade-badge').className='score-grade grade-3';
+  document.getElementById('grade-badge').textContent='Submit test to see results';
+  document.getElementById('s-cor').textContent='—';
+  document.getElementById('s-pct').textContent='—';
+  showTab('test');
+}
+
+function showTab(t){
+  ['test','answers','results','key'].forEach(id=>{
+    document.getElementById(id).className='section'+(id===t?' active':'');
+  });
+  document.querySelectorAll('.tab-btn').forEach((el,i)=>{
+    el.className='tab-btn'+((['test','answers','results','key'][i])===t?' active':'');
+  });
+}
+
+buildQs();buildGrids();
+</script>
+</body>
+</html>
