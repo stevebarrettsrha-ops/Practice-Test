@@ -339,7 +339,7 @@
 
   <!-- ANSWERS SECTION -->
   <div id="answers" class="section">
-    <p class="section-intro">Your selected answers are shown below. Colours appear after you submit: green = correct, red = incorrect.</p>
+    <p class="section-intro">Correct answers for all questions are shown below.</p>
     <div id="ans-list"></div>
     <div class="actions">
       <button class="btn primary" onclick="showTab('test')">Back to Test</button>
@@ -508,14 +508,7 @@ function buildAnswerSheet(){
   const list=document.getElementById('ans-list');
   if(!list)return;
   list.innerHTML=Qs.map((q,i)=>{
-    let ansHtml;
-    if(uA[i]===null){
-      ansHtml=`<div class="ans-opt"><span class="opt-letter">—</span><span>Not answered</span></div>`;
-    } else {
-      let cls='ans-opt selected';
-      if(done) cls='ans-opt '+(uA[i]===q.a?'correct':'wrong');
-      ansHtml=`<div class="${cls}"><span class="opt-letter">${L[uA[i]]}</span><span>${q.o[uA[i]]}</span></div>`;
-    }
+    const ansHtml=`<div class="ans-opt correct"><span class="opt-letter">${L[q.a]}</span><span>${q.o[q.a]}</span></div>`;
     return`<div class="ans-q">
       <div class="ans-q-header">
         <span class="q-number">${String(i+1).padStart(2,'0')}</span>
