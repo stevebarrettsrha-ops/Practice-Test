@@ -286,6 +286,31 @@
   .ans-opt.selected .opt-letter { background: var(--blue); color: #fff; }
   .ans-opt.correct .opt-letter { background: var(--green); color: #fff; }
   .ans-opt.wrong .opt-letter { background: var(--red); color: #fff; }
+  /* KEY TABLE SCROLL WRAPPER */
+  .key-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 2rem; }
+  .key-table-wrap .key-table { margin-bottom: 0; }
+  /* MOBILE */
+  @media (max-width: 600px) {
+    header { padding: 1.25rem 1rem 1rem; }
+    .progress-inner { padding: 0.6rem 1rem; }
+    .tabs { padding: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab-btn { padding: 0.75rem 0.85rem; font-size: 12px; white-space: nowrap; flex-shrink: 0; }
+    main { padding: 1rem; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .stat-cell { padding: 0.75rem; }
+    .stat-num { font-size: 22px; }
+    .q-header { padding: 0.75rem 1rem 0; }
+    .q-number { font-size: 18px; min-width: 26px; }
+    .actions { flex-direction: column; }
+    .btn { width: 100%; }
+    .score-hero { padding: 1.75rem 1rem; }
+    .score-big { font-size: 48px; }
+    .score-denom { font-size: 24px; }
+    .score-pct { font-size: 16px; }
+    .key-table th, .key-table td { padding: 6px 8px; font-size: 11px; }
+    .ans-q-header { padding: 0.6rem 0.75rem; }
+  }
 </style>
 </head>
 <body>
@@ -363,7 +388,7 @@
   <!-- RATING KEY SECTION -->
   <div id="key" class="section">
     <p class="section-intro">This rating scale is used to assess your level of competency in the skill area.</p>
-    <table class="key-table">
+    <div class="key-table-wrap"><table class="key-table">
       <thead>
         <tr>
           <th>Competency</th>
@@ -403,7 +428,7 @@
           <td>Demonstrates insufficient evidence of the knowledge, ability and actions in the skill area; no judgement can be made on individual's competence.</td>
         </tr>
       </tbody>
-    </table>
+    </table></div>
     <div class="actions">
       <button class="btn primary" onclick="showTab('test')">Go to Test</button>
     </div>
