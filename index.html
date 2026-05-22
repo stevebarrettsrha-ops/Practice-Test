@@ -277,8 +277,7 @@
   .section-intro { font-size: 13px; color: #888; margin-bottom: 1.5rem; line-height: 1.6; }
   .ans-q { border: 1px solid var(--rule); border-radius: 8px; background: #fff; margin-bottom: 0.75rem; overflow: hidden; }
   .ans-q-header { display: flex; align-items: baseline; gap: 10px; padding: 0.75rem 1rem; border-bottom: 1px solid var(--rule); background: var(--cream); }
-  .ans-q-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); }
-  @media (max-width: 520px) { .ans-q-opts { grid-template-columns: 1fr; } }
+  .ans-q-opts { display: block; border-top: 1px solid var(--rule); }
   .ans-opt { display: flex; align-items: flex-start; gap: 8px; padding: 0.5rem 0.75rem; background: var(--paper); font-size: 12px; line-height: 1.5; color: var(--ink); }
   .ans-opt.selected { background: var(--blue-light); }
   .ans-opt.correct { background: var(--green-light); }
@@ -509,18 +508,20 @@ function buildAnswerSheet(){
   const list=document.getElementById('ans-list');
   if(!list)return;
   list.innerHTML=Qs.map((q,i)=>{
-    const opts=q.o.map((o,j)=>{
-      let cls='ans-opt';
-      if(done){if(j===q.a)cls+=' correct';else if(uA[i]===j)cls+=' wrong';}
-      else if(uA[i]===j)cls+=' selected';
-      return`<div class="${cls}"><span class="opt-letter">${L[j]}</span><span>${o}</span></div>`;
-    }).join('');
+    let ansHtml;
+    if(uA[i]===null){
+      ansHtml=`<div class="ans-opt"><span class="opt-letter">—</span><span>Not answered</span></div>`;
+    } else {
+      let cls='ans-opt selected';
+      if(done) cls='ans-opt '+(uA[i]===q.a?'correct':'wrong');
+      ansHtml=`<div class="${cls}"><span class="opt-letter">${L[uA[i]]}</span><span>${q.o[uA[i]]}</span></div>`;
+    }
     return`<div class="ans-q">
       <div class="ans-q-header">
         <span class="q-number">${String(i+1).padStart(2,'0')}</span>
         <p class="q-text">${q.q}</p>
       </div>
-      <div class="ans-q-opts">${opts}</div>
+      <div class="ans-q-opts">${ansHtml}</div>
     </div>`;
   }).join('');
 }
